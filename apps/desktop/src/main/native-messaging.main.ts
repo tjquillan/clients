@@ -172,7 +172,7 @@ export class NativeMessagingMain {
             const p = path.join(value, "NativeMessagingHosts", "com.8bit.bitwarden.json");
 
             let manifest: any = chromeJson;
-            if (key === "Firefox") {
+            if (key === "Firefox" || key === "Zen") {
               manifest = firefoxJson;
             }
 
@@ -186,7 +186,7 @@ export class NativeMessagingMain {
       case "linux": {
         for (const [key, value] of Object.entries(this.getLinuxNMHS())) {
           if (existsSync(value)) {
-            if (key === "Firefox") {
+            if (key === "Firefox" || key === "Zen") {
               await this.writeManifest(
                 path.join(value, "native-messaging-hosts", "com.8bit.bitwarden.json"),
                 firefoxJson,
@@ -255,7 +255,7 @@ export class NativeMessagingMain {
       }
       case "linux": {
         for (const [key, value] of Object.entries(this.getLinuxNMHS())) {
-          if (key === "Firefox") {
+          if (key === "Firefox" || key === "Zen") {
             await this.removeIfExists(
               path.join(value, "native-messaging-hosts", "com.8bit.bitwarden.json"),
             );
@@ -313,6 +313,7 @@ export class NativeMessagingMain {
       "Microsoft Edge Dev": `${this.homedir()}/Library/Application\ Support/Microsoft\ Edge\ Dev/`,
       "Microsoft Edge Canary": `${this.homedir()}/Library/Application\ Support/Microsoft\ Edge\ Canary/`,
       Vivaldi: `${this.homedir()}/Library/Application\ Support/Vivaldi/`,
+      Zen: `${this.homedir()}/Library/Application\ Support/zen/`,
     };
     /* eslint-enable no-useless-escape */
   }
@@ -323,6 +324,7 @@ export class NativeMessagingMain {
       Chrome: `${this.homedir()}/.config/google-chrome/`,
       Chromium: `${this.homedir()}/.config/chromium/`,
       "Microsoft Edge": `${this.homedir()}/.config/microsoft-edge/`,
+      Zen: `${this.homedir()}/.zen`,
     };
   }
 
@@ -358,13 +360,13 @@ export class NativeMessagingMain {
     switch (process.platform) {
       case "darwin": {
         chromePaths = Object.entries(this.getDarwinNMHS())
-          .filter(([key]) => key !== "Firefox")
+          .filter(([key]) => key !== "Firefox" && key !== "Zen")
           .map(([, value]) => value);
         break;
       }
       case "linux": {
         chromePaths = Object.entries(this.getLinuxNMHS())
-          .filter(([key]) => key !== "Firefox")
+          .filter(([key]) => key !== "Firefox" && key !== "Zen")
           .map(([, value]) => value);
         break;
       }
